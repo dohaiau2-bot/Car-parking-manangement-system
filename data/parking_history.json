@@ -1,1 +1,10 @@
-[]
+[
+    {
+        "license_plate": "36A-3636",
+        "vehicle_type": "Motorbike",
+        "slot_id": "A-1-2",
+        "check_in_time": "2026-06-25 17:44:14",
+        "check_out_time": "2026-06-25 17:44:23",
+        "fee": 5000
+    }
+]
