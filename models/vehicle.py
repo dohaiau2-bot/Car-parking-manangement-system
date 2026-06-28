@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
+from models.transportation import PhuongTien
 import math
 
 class Vehicle(ABC):
