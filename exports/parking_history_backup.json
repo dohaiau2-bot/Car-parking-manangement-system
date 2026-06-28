@@ -1,0 +1,38 @@
+[
+    {
+        "id": 16,
+        "license_plate": "75A-7474",
+        "vehicle_type": "Car",
+        "slot_id": "B-R1C1",
+        "check_in_time": "2026-06-28 18:52:23",
+        "check_out_time": "2026-06-28 18:53:00",
+        "fee": 20000.0
+    },
+    {
+        "id": 15,
+        "license_plate": "36A-3636",
+        "vehicle_type": "Car",
+        "slot_id": "B-R1C2",
+        "check_in_time": "2026-06-28 18:52:39",
+        "check_out_time": "2026-06-28 18:52:56",
+        "fee": 20000.0
+    },
+    {
+        "id": 14,
+        "license_plate": "14",
+        "vehicle_type": "Motorbike",
+        "slot_id": "M-03-05",
+        "check_in_time": "2026-06-28 17:47:32",
+        "check_out_time": "2026-06-28 17:50:10",
+        "fee": 5000.0
+    },
+    {
+        "id": 13,
+        "license_plate": "71A-44447",
+        "vehicle_type": "Motorbike",
+        "slot_id": "M-01-01",
+        "check_in_time": "2026-06-28 17:12:44",
+        "check_out_time": "2026-06-28 17:12:49",
+        "fee": 5000.0
+    }
+]

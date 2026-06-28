@@ -1,5 +1,5 @@
 from controllers.base_mananger import BaseParkingManager
-from models.vehicle import Motorbike, Car
+from models.car import Motorbike, Car
 from models.parking_slot import ParkingSlot
 from exceptions import LotFullError
 from datetime import datetime

@@ -1,5 +1,5 @@
 from controllers.base_mananger import BaseParkingManager
-from models.vehicle import Motorbike, Car
+from models.car import Motorbike, Car
 from exceptions import VehicleNotFoundError
 from datetime import datetime
 

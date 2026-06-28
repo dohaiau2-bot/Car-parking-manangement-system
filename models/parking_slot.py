@@ -1,5 +1,5 @@
 from typing import Optional
-from models.vehicle import Vehicle
+from models.car import Vehicle
 
 class ParkingSlot:
     def __init__(self, slot_id: str, slot_type: str):
