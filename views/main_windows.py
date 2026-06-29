@@ -1,13 +1,15 @@
+
 import tkinter as tk
 from tkinter import ttk
 from views.tab_motorbike import MotorbikeTabBuilder
 from views.tab_car import CarTabBuilder
+from views.tab_employee import EmployeeTabBuilder # Import tab mới thiết lập
 
 class Dashboard:
     def __init__(self, root):
         self.root = root
         self.root.title("ĐỒ ÁN: HỆ THỐNG QUẢN LÝ BÃI XE THÔNG MINH")
-        self.root.geometry("1100x700") # Cấu hình kích thước tối ưu cho cả 2 tab
+        self.root.geometry("1200x750") # Tối ưu lại kích thước để hiển thị thêm ma trận lịch trực
         
         # 1. Thanh Tiêu Đề Chính (Header) của Hệ Thống
         self.header_frame = tk.Frame(self.root, bg="#1E88E5", pady=12)
@@ -30,7 +32,7 @@ class Dashboard:
         self.setup_all_parking_tabs()
 
     def setup_all_parking_tabs(self):
-        """Hàm gộp chính phụ trách khởi tạo và nhúng các tab vào Dashboard"""
+        """Hàm khởi tạo và nhúng các tab vào Dashboard"""
         
         # --- TAB 1: QUẢN LÝ XE MÁY (KHU A) ---
         self.tab_motorbike = ttk.Frame(self.notebook)
@@ -41,3 +43,8 @@ class Dashboard:
         self.tab_car = ttk.Frame(self.notebook)
         self.notebook.add(self.tab_car, text=" 🚗 QUẢN LÝ Ô TÔ (KHU B) ")
         self.app_tab_b = CarTabBuilder(self.tab_car)
+
+        # --- TAB 3: QUẢN LÝ NHÂN VIÊN & LỊCH TRỰC (MỚI THÊM) ---
+        self.tab_employee = ttk.Frame(self.notebook)
+        self.notebook.add(self.tab_employee, text=" 👥 QUẢN LÝ NHÂN VIÊN & CA TRỰC ")
+        self.app_tab_employee = EmployeeTabBuilder(self.tab_employee)
