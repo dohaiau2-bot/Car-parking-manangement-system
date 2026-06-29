@@ -65,7 +65,7 @@ class MotorbikeTabBuilder:
 
     def log_to_csv_backup(self, plate, slot_id, time_in, time_out, fee):
         """CHỨC NĂNG BỔ SUNG: Tự động lưu trữ lịch sử xe ra vào dưới dạng file CSV để hậu kiểm"""
-        file_name = "parking_history_backup.csv"
+        file_name = "parking_history_backup_motorbike.csv"
         file_exists = os.path.isfile(file_name)
         
         try:

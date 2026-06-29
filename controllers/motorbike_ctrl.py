@@ -105,8 +105,8 @@ class MotorbikeController:
         return receipt_text
     
     def save_log_to_csv(self, vehicle_data):
-     file_exists = os.path.isfile('parking_history.csv')
-     with open('parking_history.csv', 'a', newline='', encoding='utf-8') as f:
+     file_exists = os.path.isfile('parking_history_motorbike.csv')
+     with open('parking_history_motorbike.csv', 'a', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=["plate", "in", "out", "fee"])
         if not file_exists: writer.writeheader()
         writer.writerow(vehicle_data)
