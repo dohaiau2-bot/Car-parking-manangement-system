@@ -39,3 +39,26 @@ class EmployeeController:
     def reset_shift(self, day, shift):
         self.model.clear_shift(day, shift)
         return f"Đã giải phóng ca trực. Hàng đợi tự động đôn người tiếp theo!"
+    
+    def get_employee_info(self, emp_id):
+        return self.model.get_employee_info(emp_id)
+
+    def update_employee(self, emp_id, fullname, phone, email, position):
+        if not emp_id or not fullname:
+            return False, "Mã NV và Họ tên không được để trống!"
+        
+        success = self.model.update_employee(emp_id, fullname, phone, email, position)
+        if success:
+            return True, "Cập nhật thông tin nhân viên thành công!"
+        else:
+            return False, "Không tìm thấy Mã nhân viên trong hệ thống!"
+
+    def delete_employee(self, emp_id):
+        if not emp_id:
+            return False, "Vui lòng nhập Mã NV cần xóa!"
+        
+        success = self.model.delete_employee(emp_id)
+        if success:
+            return True, "Đã xóa nhân viên và toàn bộ lịch trực liên quan!"
+        else:
+            return False, "Không tìm thấy Mã nhân viên trong hệ thống!"

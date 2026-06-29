@@ -114,6 +114,42 @@ class EmployeeModel:
         rows = cursor.fetchall()
         conn.close()
         return [r[0] for r in rows]
+    
+    def get_employee_info(self, emp_id):
+        """Lấy toàn bộ thông tin của 1 nhân viên theo mã"""
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM employees WHERE emp_id = ?", (emp_id,))
+        row = cursor.fetchone()
+        conn.close()
+        return row
+
+    def update_employee(self, emp_id, fullname, phone, email, position):
+        """Cập nhật thông tin nhân viên"""
+        conn = self.connect()
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE employees 
+            SET fullname = ?, phone = ?, email = ?, position = ? 
+            WHERE emp_id = ?
+        """, (fullname, phone, email, position, emp_id))
+        rows_affected = cursor.rowcount
+        conn.commit()
+        conn.close()
+        return rows_affected > 0
+
+    def delete_employee(self, emp_id):
+        """Xóa nhân viên (xóa luôn các lịch trực liên quan để tránh lỗi dữ liệu)"""
+        conn = self.connect()
+        cursor = conn.cursor()
+        # Xóa lịch trực trước
+        cursor.execute("DELETE FROM schedules WHERE emp_id = ?", (emp_id,))
+        # Xóa nhân viên
+        cursor.execute("DELETE FROM employees WHERE emp_id = ?", (emp_id,))
+        rows_affected = cursor.rowcount
+        conn.commit()
+        conn.close()
+        return rows_affected > 0
 
     def clear_shift(self, day, shift):
         """Hủy ca trực hiện tại. Người đầu tiên trong hàng đợi (Queue) sẽ được đôn lên thay thế"""

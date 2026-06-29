@@ -47,8 +47,17 @@ class EmployeeTabBuilder:
         self.ent_pos = tk.Entry(reg_frame, width=25)
         self.ent_pos.grid(row=4, column=1, pady=2)
 
-        btn_reg = tk.Button(reg_frame, text="➕ Thêm Nhân Viên", bg="#2ECC71", fg="white", font=("Arial", 10, "bold"), command=self.handle_register)
-        btn_reg.grid(row=5, column=0, columnspan=2, pady=10, sticky='we')
+        action_frame = tk.Frame(reg_frame)
+        action_frame.grid(row=5, column=0, columnspan=2, pady=10, sticky='we')
+
+        btn_reg = tk.Button(action_frame, text="➕ Thêm", bg="#2ECC71", fg="white", font=("Arial", 10, "bold"), command=self.handle_register)
+        btn_reg.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=2)
+
+        btn_update = tk.Button(action_frame, text="🔄 Sửa", bg="#F39C12", fg="white", font=("Arial", 10, "bold"), command=self.handle_update)
+        btn_update.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=2)
+
+        btn_del = tk.Button(action_frame, text="🗑️ Xóa", bg="#E74C3C", fg="white", font=("Arial", 10, "bold"), command=self.handle_delete)
+        btn_del.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=2)
 
         # ----------------- PHẦN 2: PHÂN CÔNG CA TRỰC -----------------
         assign_frame = tk.LabelFrame(left_frame, text=" 🛠️ CÔNG CỤ ĐIỀU HÀNH CA ", font=("Arial", 10, "bold"), padx=10, pady=10)
@@ -57,6 +66,7 @@ class EmployeeTabBuilder:
         tk.Label(assign_frame, text="1. Chọn Nhân Viên:").pack(anchor='w', pady=2)
         self.cbo_employees = ttk.Combobox(assign_frame, state="readonly", width=28)
         self.cbo_employees.pack(fill=tk.X, pady=2)
+        self.cbo_employees.bind("<<ComboboxSelected>>", self.on_employee_selected)
         self.refresh_employee_combobox()
 
         tk.Label(assign_frame, text="2. Thao tác Ca (Chọn ca trên Sơ đồ trước):").pack(anchor='w', pady=10)
@@ -166,6 +176,66 @@ class EmployeeTabBuilder:
             self.ent_pos.delete(0, tk.END)
         else:
             messagebox.showerror("Lỗi", msg)
+
+    def clear_form(self):
+        """Hàm tiện ích để dọn dẹp form"""
+        self.ent_id.config(state=tk.NORMAL) # Mở khóa nếu đang bị khóa
+        self.ent_id.delete(0, tk.END)
+        self.ent_name.delete(0, tk.END)
+        self.ent_phone.delete(0, tk.END)
+        self.ent_email.delete(0, tk.END)
+        self.ent_pos.delete(0, tk.END)
+
+    def on_employee_selected(self, event):
+        """Tự động đổ dữ liệu lên Form khi chọn nhân viên ở Combobox"""
+        selected_emp_text = self.cbo_employees.get()
+        if selected_emp_text:
+            emp_id = self.employee_map[selected_emp_text]
+            info = self.ctrl.get_employee_info(emp_id) # (emp_id, fullname, phone, email, pos)
+            
+            if info:
+                self.clear_form()
+                self.ent_id.insert(0, info[0])
+                self.ent_id.config(state="readonly") # Khóa mã NV lại không cho sửa khi Update
+                
+                self.ent_name.insert(0, info[1])
+                self.ent_phone.insert(0, info[2] if info[2] else "")
+                self.ent_email.insert(0, info[3] if info[3] else "")
+                self.ent_pos.insert(0, info[4] if info[4] else "")
+
+    def handle_update(self):
+        emp_id = self.ent_id.get().strip()
+        name = self.ent_name.get().strip()
+        phone = self.ent_phone.get().strip()
+        email = self.ent_email.get().strip()
+        pos = self.ent_pos.get().strip()
+
+        success, msg = self.ctrl.update_employee(emp_id, name, phone, email, pos)
+        if success:
+            messagebox.showinfo("Thành công", msg)
+            self.refresh_employee_combobox() # Cập nhật lại list combobox (nếu có đổi tên)
+            self.refresh_schedule_view() # Tên trên lịch trực cũng sẽ tự nhảy sang tên mới
+            self.clear_form()
+        else:
+            messagebox.showerror("Lỗi", msg)
+
+    def handle_delete(self):
+        emp_id = self.ent_id.get().strip()
+        if not emp_id:
+            messagebox.showwarning("Cảnh báo", "Vui lòng chọn hoặc nhập Mã NV cần xóa!")
+            return
+
+        confirm = messagebox.askyesno("Xác nhận", f"Bạn có chắc muốn xóa nhân viên {emp_id}?\nToàn bộ lịch trực của người này sẽ bị hủy bỏ!")
+        if confirm:
+            success, msg = self.ctrl.delete_employee(emp_id)
+            if success:
+                messagebox.showinfo("Thành công", msg)
+                self.refresh_employee_combobox()
+                self.refresh_schedule_view() # Xóa luôn khỏi sơ đồ lịch
+                self.clear_form()
+                self.cbo_employees.set('') # Xóa chữ trên combobox
+            else:
+                messagebox.showerror("Lỗi", msg)
 
     def handle_assign(self):
         selected_emp_text = self.cbo_employees.get()
